@@ -1,0 +1,20 @@
+/*/deep/.mat-calendar-body-begin-range:not(.mat-calendar-body-end-range):not(.begin) {
+  background-color: transparent;
+}
+
+/deep/.mat-calendar-body-end-range:not(.mat-calendar-body-begin-range):not(.end) {
+  background-color: transparent;
+}
+
+/deep/.mat-calendar-cell-semi-selected:not(.selected) {
+  background-color: transparent;
+}*/
+
+/deep/.selected {background: #c5e9d3;}
+/deep/.selected.end {border-radius: 0 100% 100% 0}
+/deep/.selected.begin {border-radius: 100% 0 0 100%}
+/deep/.selected.end.begin {border-radius: 100%}
+
+/deep/.selected.end .mat-calendar-body-cell-content,
+/deep/.selected.begin .mat-calendar-body-cell-content
+{ background-color: #3fb56c; color: white; }
