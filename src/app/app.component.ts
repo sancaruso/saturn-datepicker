@@ -72,10 +72,9 @@ export class AppComponent {
         });
         if (addNew) {
           newDates.push(range);
-        } else {
-          //this.form.reset({date: newDates[0]});
         }
-        this.form.reset();
+        // workaround with setTimeout
+        setTimeout(() => this.form.reset(), 0);
         this.dates = newDates;
       }
 
