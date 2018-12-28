@@ -10,10 +10,10 @@
   background-color: transparent;
 }*/
 
-/deep/.selected {background: #c5e9d3;}
-/deep/.selected.end {border-radius: 0 100% 100% 0}
-/deep/.selected.begin {border-radius: 100% 0 0 100%}
-/deep/.selected.end.begin {border-radius: 100%}
+/deep/.selected {background-color: #c5e9d3;}
+/deep/.selected.end {background-color: #c5e9d3; border-radius: 0 100% 100% 0}
+/deep/.selected.begin {background-color: #c5e9d3; border-radius: 100% 0 0 100%}
+/deep/.selected.end.begin {background-color: #c5e9d3; border-radius: 100%}
 
 /deep/.selected.end .mat-calendar-body-cell-content,
 /deep/.selected.begin .mat-calendar-body-cell-content
