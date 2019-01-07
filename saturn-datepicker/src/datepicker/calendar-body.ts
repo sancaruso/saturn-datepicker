@@ -118,7 +118,8 @@ export class SatCalendarBody implements OnChanges {
   /** Width of an individual cell. */
   _cellWidth: string;
 
-  _cellOver: number;
+  /** The cell number of the hovered cell */
+  private _cellOver: number;
 
   constructor(private _elementRef: ElementRef<HTMLElement>, private _ngZone: NgZone) { }
 
@@ -129,7 +130,7 @@ export class SatCalendarBody implements OnChanges {
   }
 
   _mouseOverCell(cell: SatCalendarCell): void {
-    this._setCellOver(cell.value);
+    this._cellOver = cell.value;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -149,7 +150,7 @@ export class SatCalendarBody implements OnChanges {
     }
 
     if (changes.activeCell) {
-      this._setCellOver(this.activeCell + 1);
+      this._cellOver = this.activeCell + 1;
     }
   }
 
@@ -187,7 +188,7 @@ export class SatCalendarBody implements OnChanges {
 
   /** Whenever to mark cell as semi-selected before the second date is selected (between the begin cell and the hovered cell). */
   _isBetweenOverAndBegin(date: number): boolean {
-    if (!this._cellOver) {
+    if (!this._cellOver || !this.rangeMode || !this.beginSelected) {
       return false;
     }
     if (this.isBeforeSelected && !this.begin) {
@@ -204,20 +205,28 @@ export class SatCalendarBody implements OnChanges {
 
   /** Whenever to mark cell as begin of the range. */
   _isBegin(date: number): boolean {
-    if (this.isBeforeSelected && !this.begin) {
-      return this._cellOver === date;
+    if (this.rangeMode && this.beginSelected && this._cellOver) {
+      if (this.isBeforeSelected && !this.begin) {
+        return this._cellOver === date;
+      } else {
+        return (this.begin === date && !(this._cellOver < this.begin)) ||
+          (this._cellOver === date && this._cellOver < this.begin)
+      }
     }
-    return (this.begin === date && !(this._cellOver && this._cellOver < this.begin)) ||
-      (this._cellOver === date && this._cellOver < this.begin);
+    return this.begin === date;
   }
 
   /** Whenever to mark cell as end of the range. */
   _isEnd(date: number): boolean {
-    if (this.isBeforeSelected && !this.begin) {
-      return false;
+    if (this.rangeMode && this.beginSelected && this._cellOver) {
+      if (this.isBeforeSelected && !this.begin) {
+        return false;
+      } else {
+        return (this.end === date && !(this._cellOver > this.begin)) ||
+          (this._cellOver === date && this._cellOver > this.begin)
+      }
     }
-    return (this.end === date && !(this._cellOver && this._cellOver > this.begin)) ||
-      (this._cellOver === date && this._cellOver > this.begin);
+    return this.end === date;
   }
 
   /** Focuses the active cell after the microtask queue is empty. */
@@ -232,13 +241,5 @@ export class SatCalendarBody implements OnChanges {
         }
       });
     });
-  }
-
-  private _setCellOver(value: number): void {
-    if (this.beginSelected && this.rangeMode) {
-      this._cellOver = value;
-    } else {
-      this._cellOver = null;
-    }
   }
 }
